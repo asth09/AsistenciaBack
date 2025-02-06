@@ -31,7 +31,7 @@ export const login = async (req, res) => {
     const { usuario, password } = req.body
 
     try {
-        const userFound = await User.findOne({usuario})
+        /*const userFound = await User.findOne({usuario})
         if (!userFound) return res.status(400).json({message:"Usuario o contraseña incorrecta"})
 
         const isMatch = await bcrypt.compare(password, userFound.password)
@@ -41,8 +41,11 @@ export const login = async (req, res) => {
         res.cookie('token', token);
             res.json({
                 message:"Bienvenido",
-            })
+            })*/
         //res.send('registrando')
+        return res.status(200).json({
+            message: "Bienvenido"
+        });
     } catch (error) {
         console.log(error)
     }
