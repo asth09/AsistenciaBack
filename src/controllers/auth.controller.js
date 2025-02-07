@@ -43,9 +43,6 @@ export const login = async (req, res) => {
                 message:"Bienvenido",
             })
         //res.send('registrando')
-        return res.status(200).json({
-            message: "Bienvenido"
-        });
     } catch (error) {
         console.log(error)
     }
