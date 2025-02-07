@@ -43,6 +43,7 @@ export const login = async (req, res) => {
             secure: true,
             sameSite: 'None',
             path: '/',
+            partitioned: true,
             expires: new Date(Date.now() + 1000 * 60 * 60 * 24), // expira en un dia si queres
         });
         return res.json({
@@ -50,6 +51,9 @@ export const login = async (req, res) => {
         })
     } catch (error) {
         console.log(error)
+        return res.json({
+            message: "error de login"
+        })
     }
 };
 

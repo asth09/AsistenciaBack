@@ -1,6 +1,7 @@
 import express from "express";
 import cookieParser from "cookie-parser";
 import cors from "cors";
+import bodyParser from "body-parser";
 
 import authRoutes from './routes/auth.routes.js';
 import docenteRoutes from './routes/docente.routes.js';
@@ -27,6 +28,8 @@ const whitelist = [
   app.use(cors(corsOptions));
   app.use(express.json());
   app.use(cookieParser());
+  app.use(bodyParser.json())
+  app.use(bodyParser.urlencoded({ extended: true }));
 
 
 app.use("/api", authRoutes);
