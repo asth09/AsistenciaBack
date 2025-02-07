@@ -17,7 +17,7 @@ export const register = async (req, res) => {
         
         const userSaved = await newUser.save()
         const token = await createAccessToken({id: userSaved._id, role: userSaved.role})
-        res.cookie('token', token)
+        res.cookie('token', token, { sameSite: 'None', secure: true })
             res.json({
                 message:"User created successfully",
             })
@@ -31,17 +31,17 @@ export const login = async (req, res) => {
     const { usuario, password } = req.body
 
     try {
-        /*const userFound = await User.findOne({usuario})
+        const userFound = await User.findOne({usuario})
         if (!userFound) return res.status(400).json({message:"Usuario o contraseña incorrecta"})
 
         const isMatch = await bcrypt.compare(password, userFound.password)
         if (!isMatch) return res.status(400).json({ message:"Usuario o contraseña incorrecta" })
 
         const token = await createAccessToken({ id: userFound._id, role: userFound.role })
-        res.cookie('token', token);
+        res.cookie('token', token, { sameSite: 'None', secure: true });
             res.json({
                 message:"Bienvenido",
-            })*/
+            })
         //res.send('registrando')
         return res.status(200).json({
             message: "Bienvenido"
