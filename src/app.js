@@ -8,14 +8,25 @@ import empleadoRoutes from './routes/trabajador.routes.js';
 
 const app = express();
 
-app.use(cors({
-    origin: 'https://asistencia-front.vercel.app', // Especifica el origen
-    credentials: true, // Permitir credenciales
-    methods: "PUT, POST, GET, DELETE, PATCH, OPTIONS",
-    allowedHeaders: "content-type"
-}));
-app.use(express.json());
-app.use(cookieParser());
+const whitelist = [
+    "http://localhost:5173",
+    "https://asistencia-front.vercel.app"
+  ];
+  
+  const corsOptions = {
+    origin: function (origin , callback ) {
+      if (!origin || whitelist.indexOf(origin) !== -1) {
+        callback(null, true);
+      } else {
+        callback(new Error('Not allowed by CORS'));
+      }
+    },
+    credentials: true,
+  };
+  
+  app.use(cors(corsOptions));
+  app.use(express.json());
+  app.use(cookieParser());
 
 
 app.use("/api", authRoutes);

@@ -17,7 +17,7 @@ export const register = async (req, res) => {
         
         const userSaved = await newUser.save()
         const token = await createAccessToken({id: userSaved._id, role: userSaved.role})
-        res.cookie('token', token, { sameSite: 'None', secure: true })
+        res.cookie('token', token)
             res.json({
                 message:"User created successfully",
             })
@@ -31,18 +31,23 @@ export const login = async (req, res) => {
     const { usuario, password } = req.body
 
     try {
-        const userFound = await User.findOne({usuario})
-        if (!userFound) return res.status(400).json({message:"Usuario o contraseña incorrecta"})
+        const userFound = await User.findOne({ usuario })
+        if (!userFound) return res.status(400).json({ message: "Usuario o contraseña incorrecta" })
 
         const isMatch = await bcrypt.compare(password, userFound.password)
-        if (!isMatch) return res.status(400).json({ message:"Usuario o contraseña incorrecta" })
+        if (!isMatch) return res.status(400).json({ message: "Usuario o contraseña incorrecta" })
 
         const token = await createAccessToken({ id: userFound._id, role: userFound.role })
-        res.cookie('token', token, { sameSite: 'None', secure: true });
-            res.json({
-                message:"Bienvenido",
-            })
-        //res.send('registrando')
+        res.cookie('token', token, {
+            httpOnly: true,
+            secure: true,
+            sameSite: 'None',
+            path: '/',
+            expires: new Date(Date.now() + 1000 * 60 * 60 * 24), // expira en un dia si queres
+        });
+        return res.json({
+            message: "bienvenido"
+        })
     } catch (error) {
         console.log(error)
     }
