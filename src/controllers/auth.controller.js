@@ -31,32 +31,22 @@ export const login = async (req, res) => {
     const { usuario, password } = req.body
 
     try {
-        const userFound = await User.findOne({ usuario })
-        if (!userFound) return res.status(400).json({ message: "Usuario o contraseña incorrecta" })
+        const userFound = await User.findOne({usuario})
+        if (!userFound) return res.status(400).json({message:"Usuario o contraseña incorrecta"})
 
         const isMatch = await bcrypt.compare(password, userFound.password)
-        if (!isMatch) return res.status(400).json({ message: "Usuario o contraseña incorrecta" })
+        if (!isMatch) return res.status(400).json({ message:"Usuario o contraseña incorrecta" })
 
         const token = await createAccessToken({ id: userFound._id, role: userFound.role })
-        res.cookie('token', token, {
-            httpOnly: true,
-            secure: true,
-            sameSite: 'None',
-            path: '/',
-            partitioned: true,
-            expires: new Date(Date.now() + 1000 * 60 * 60 * 24), // expira en un dia si queres
-        });
-        return res.json({
-            message: "bienvenido"
-        })
+        res.cookie('token', token);
+            res.json({
+                message:"Bienvenido",
+            })
+        //res.send('registrando')
     } catch (error) {
         console.log(error)
-        return res.json({
-            message: "error de login"
-        })
     }
 };
-
 export const logout = (req, res) => {
     res.cookie('token', "", {
         expires: new Date(0)
